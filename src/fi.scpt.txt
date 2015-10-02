@@ -1,31 +1,33 @@
 on alfred_script(q)
-  tell application "Finder"
-    set pathList to (quoted form of POSIX path of (folder of the front window as alias))
-  end tell
-  
-  tell application "System Events"
-    set isRunning to (exists (processes where name is "iTerm"))
-  end tell
-  
-  tell application "iTerm"
-    set termCount to count of window
-    
-    if termCount is 0 then
-      set myTerm to (make new window)
-    else
-      set myTerm to the first window
-    end if
-    
-    tell myTerm
-      if not isRunning and termCount is not 0 then
-        set mySession to current session
-      else
-        set mySession to (launch session "")
-      end if
-      tell mySession to write text "clear; cd " & pathList
-      
+    tell application "Finder"
+        set pathList to (quoted form of POSIX path of (folder of the front window as alias))
     end tell
     
-    activate
-  end tell
+    tell application "System Events"
+        set isRunning to (exists (processes where name is "iTerm"))
+    end tell
+    
+    tell application "iTerm"
+        set termCount to count of window
+        
+        if termCount is 0 then
+            set myTerm to (create window with default profile)
+        else
+            set myTerm to the first window
+        end if
+        
+        tell myTerm
+            if not isRunning and termCount is not 0 then
+                set myTab to (create tab with default profile)
+                set mySession to current session
+            else
+                set myTab to (create tab with default profile)
+                set mySession to current session
+            end if
+            tell mySession to write text "cd " & pathList
+            
+        end tell
+        
+        activate
+    end tell
 end alfred_script
