@@ -8,12 +8,12 @@ on alfred_script(q)
   end tell
   
   tell application "iTerm"
-    set termCount to count of terminals
+    set termCount to count of window
     
     if termCount is 0 then
-      set myTerm to (make new terminal)
+      set myTerm to (make new window)
     else
-      set myTerm to the first terminal
+      set myTerm to the first window
     end if
     
     tell myTerm
